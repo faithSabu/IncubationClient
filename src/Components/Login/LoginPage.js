@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LoginImg from '../../Assets/welcome2.avif'
 import axios from '../../Config/BaseUrl'
+import { AuthLoginContext } from '../../Context/Context';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const {setUser,setUserId} = useContext(AuthLoginContext);
   
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
@@ -20,9 +22,15 @@ function LoginPage() {
         email,password
       }
     })
+    
+    console.log(response);
+    let user = response.data ? response.data.userData : undefined;
 
     if(response.data.login){
+      setUser(user.name);
+      setUserId(user._id)
       navigate('/',{name:'email'})
+
       
     }else{
       setInvalidCred('Invalid UserName or Password')
